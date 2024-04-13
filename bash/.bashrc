@@ -56,23 +56,29 @@ function __fetch_git_branch () {
     git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(__fetch_git_status))/"
 }
 # ---
-function __fplex () {
-    [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" && -z "$TMUX" ]] || return
-    FPLEX=$(find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \; | fzy)
-    if [[ -n "$FPLEX" ]]; then
-        command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
-    fi
+function __ffind () {
+    [[ -x "$(command -v fzy)" ]] || return
+    while true; do
+        clear
+        FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first|`
+            `fzy -l 999 -p "$PWD$(__fetch_git_branch " (%s)") > ")"
+        [[ -n "$FJUMP" ]] || return
+        if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
+            cd "${FJUMP}" && continue || return
+        fi
+        case $(file --mime-type "$FJUMP" -bL) in
+            text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
+            *) command xdg-open "$FJUMP" &>/dev/null
+        esac
+    done
 }
 # ---
-function __fopen () {
-    [[ -x "$(command -v fzy)" && -x "$(command -v xdg-open)" ]] || return
-    FOPEN=$(find "$(pwd)" -not -path '*/\.*' -exec realpath '{}' \; 2>/dev/null | fzy)
-    if [[ -n "$FOPEN" ]]; then
-        case $(file --mime-type "$FOPEN" -bL) in
-            text/* | application/json) "${EDITOR:=vi}" "$FOPEN";;
-            *) command xdg-open "$FOPEN" &>/dev/null
-        esac
-    fi
+function __fjump () {
+    [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" && -z "$TMUX" ]] || return
+    FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \;|`
+        `fzy -l 999 -p "$PWD$(__fetch_git_branch " (%s)") > ")"
+    [[ -n "$FPLEX" ]] || return
+    command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
 }
 
 
@@ -96,6 +102,8 @@ alias xcut='xclip-cutfile'
 alias stow='stow --stow'
 alias restow='stow --restow'
 alias unstow='stow --delete'
+alias ff='__ffind'
+alias fj='__fjump'
 
 
 
@@ -190,12 +198,6 @@ bind 'set colored-stats on'
 
 bind -m vi-command -x '"\C-l": clear'
 bind -m vi-insert -x '"\C-l": clear'
-# ---
-bind -m vi-command -x '"\C-f": __fplex'
-bind -m vi-insert -x '"\C-f": __fplex'
-# ---
-bind -m vi-command -x '"\C-o": __fopen'
-bind -m vi-insert -x '"\C-o": __fopen'
 
 
 
