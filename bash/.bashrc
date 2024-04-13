@@ -66,7 +66,7 @@ function __ffind () {
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
         fi
-        case $(file --mime-type "$FJUMP" -bL) in
+        case $(/usr/bin/file --mime-type "$FJUMP" -bL) in
             text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
             *) command xdg-open "$FJUMP" &>/dev/null
         esac
