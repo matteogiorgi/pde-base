@@ -58,11 +58,8 @@ function __fetch_git_branch () {
 # ---
 function __ffind () {
     [[ -x "$(command -v fzy)" ]] || return
-    while true; do
-        clear
-        FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first|`
-            `fzy -l 999 -p "$PWD$(__fetch_git_branch " (%s)") > ")"
-        [[ -n "$FJUMP" ]] || return
+    while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
+          `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; do
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
         fi
@@ -75,10 +72,10 @@ function __ffind () {
 # ---
 function __fjump () {
     [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" && -z "$TMUX" ]] || return
-    FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \;|`
-        `fzy -l 999 -p "$PWD$(__fetch_git_branch " (%s)") > ")"
-    [[ -n "$FPLEX" ]] || return
-    command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
+    if FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \; | `
+          `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; then
+        command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
+    fi
 }
 
 

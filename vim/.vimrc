@@ -112,12 +112,12 @@ endfunction
 function! s:MarkLineQF()
     let l:qf_list = getqflist()
     let l:qf_entry = {
-            \ 'bufnr': bufnr("%"),
-            \ 'lnum': line("."),
-            \ 'col': col("."),
-            \ 'text': getline("."),
-            \ 'filename': expand("%:p"),
-        \ }
+              \ 'bufnr': bufnr("%"),
+              \ 'lnum': line("."),
+              \ 'col': col("."),
+              \ 'text': getline("."),
+              \ 'filename': expand("%:p"),
+          \ }
     call add(l:qf_list, l:qf_entry)
     call setqflist(l:qf_list)
     echo 'current line to quickfix'
@@ -150,12 +150,12 @@ endfunction
 augroup netrw_prettyfier
     autocmd!
     autocmd FileType netrw
-        \ setlocal bufhidden=wipe|
-        \ setlocal nobuflisted
+          \ setlocal bufhidden=wipe|
+          \ setlocal nobuflisted
     autocmd VimEnter *
-        \ if !argc() && exists(':Explore')|
-        \     Explore|
-        \ endif
+          \ if !argc() && exists(':Explore')|
+          \     Explore|
+          \ endif
     let g:netrw_banner = 0
     let g:netrw_liststyle = 4
     let g:netrw_sort_options = 'i'
@@ -171,36 +171,36 @@ augroup end
 augroup linenumber_prettyfier
     autocmd!
     autocmd WinEnter,BufEnter,FocusGained,InsertLeave *
-        \ if &number == 1|
-        \     set relativenumber|
-        \ endif|
-        \ set cursorline
+          \ if &number == 1|
+          \     set relativenumber|
+          \ endif|
+          \ set cursorline
     autocmd WinLeave,BufLeave,FocusLost,InsertEnter *
-        \ if &number == 1|
-        \     set norelativenumber|
-        \ endif|
-        \ set nocursorline
+          \ if &number == 1|
+          \     set norelativenumber|
+          \ endif|
+          \ set nocursorline
 augroup end
 " ---
 augroup cursorcolumn_prettyfier
     autocmd!
     autocmd InsertEnter *
-        \ if &filetype != 'text' && &filetype != 'markdown' && &filetype != 'tex'|
-        \     let &colorcolumn = '121,'.join(range(121,999),',')|
-        \ endif
+          \ if &filetype != 'text' && &filetype != 'markdown' && &filetype != 'tex'|
+          \     let &colorcolumn = '121,'.join(range(121,999),',')|
+          \ endif
     autocmd InsertLeave *
-        \ if &filetype != 'text' && &filetype != 'markdown' && &filetype != 'tex'|
-        \     set colorcolumn=|
-        \ endif
+          \ if &filetype != 'text' && &filetype != 'markdown' && &filetype != 'tex'|
+          \     set colorcolumn=|
+          \ endif
 augroup end
 " ---
 augroup writer_filetype
     autocmd!
     autocmd FileType markdown,tex,text
-        \ setlocal nonu nornu|
-        \ setlocal wrap conceallevel=2|
-        \ noremap <buffer> j gj|
-        \ noremap <buffer> k gk
+          \ setlocal nonu nornu|
+          \ setlocal wrap conceallevel=2|
+          \ noremap <buffer> j gj|
+          \ noremap <buffer> k gk
 augroup end
 " ---
 augroup scratchbuffer_autosave
@@ -214,15 +214,15 @@ augroup end
 
 " COMMANDS {{{
 command! ClearSearch
-    \ silent! execute 'let @/=""'|
-    \ echo 'cleared last search'
+      \ silent! execute 'let @/=""'|
+      \ echo 'cleared last search'
 command! ClearSpaces
-    \ silent! execute 'let v:statusmsg = "" | verbose %s/\s\+$//e'|
-    \ echo !empty(v:statusmsg) ? v:statusmsg : 'cleared trailing spaces'
+      \ silent! execute 'let v:statusmsg = "" | verbose %s/\s\+$//e'|
+      \ echo !empty(v:statusmsg) ? v:statusmsg : 'cleared trailing spaces'
 command! LineWrap
-    \ silent! execute &wrap ? 'setlocal nowrap' : 'setlocal wrap'|
-    \ silent! execute &wrap ?'noremap <buffer> j gj|noremap <buffer> k gk' : 'unmap <buffer> j|unmap <buffer> k'|
-    \ echo &wrap ? 'lines wrapped' : 'lines unwrapped'
+      \ silent! execute &wrap ? 'setlocal nowrap' : 'setlocal wrap'|
+      \ silent! execute &wrap ?'noremap <buffer> j gj|noremap <buffer> k gk' : 'unmap <buffer> j|unmap <buffer> k'|
+      \ echo &wrap ? 'lines wrapped' : 'lines unwrapped'
 " ---
 if has('gui_running')
     command! GuiFont silent! execute 'set guifont=*'
