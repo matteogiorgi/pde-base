@@ -201,9 +201,6 @@ bind 'set colored-stats on'
 
 bind -m vi-command -x '"\C-l": clear'
 bind -m vi-insert -x '"\C-l": clear'
-# ---
-bind -m vi-command -x '"\C-a": cd -'
-bind -m vi-insert -x '"\C-a": cd -'
 
 
 
