@@ -49,39 +49,34 @@ fi
 ### Functions
 #############
 
-function __fetch_git_branch () {
-    function __fetch_git_status () {
+function git-branch () {
+    function git-status () {
         [[ $(git status --porcelain 2>/dev/null) ]] && echo "*"
     }
-    git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(__fetch_git_status))/"
+    git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(git-status))/"
 }
 # ---
-function __ffind () {
-    [[ -x "$(command -v fzy)" ]] || return && clear
+function fhook () {
+    [[ -x "$(command -v tmux)" ]] || return && clear -x
+    case "$TMUX" in
+        "") command tmux new-session -c "$PWD" -s "$(basename "$PWD")";;
+        *) command tmux new-session -d -c "$PWD" -s "$(basename "$PWD")" \; switch-client -t "$(basename "$PWD")";;
+    esac
+}
+# ---
+function fjump () {
+    [[ -x "$(command -v fzy)" ]] || return && clear -x
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; do
+          `fzy -l 20 -p "$PWD $(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
         fi
         case $(/usr/bin/file --mime-type "$FJUMP" -bL) in
             text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
-            *) command xdg-open "$FJUMP" &>/dev/null
+            *) command xdg-open "$FJUMP" &>/dev/null;;
         esac
     done
-}
-# ---
-function __fjump () {
-    [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" ]] || return && clear
-    if FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath --relative-to="$PWD" {} \; | `
-          `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; then
-        [[ $FPLEX == "." ]] && FPLEX="$PWD"
-        if [[ -z "$TMUX" ]]; then
-            command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
-        else
-            command tmux new-session -d -c "$FPLEX" -s "$(basename "$FPLEX")" \; switch-client -t "$(basename "$FPLEX")"
-        fi
-    fi
 }
 
 
@@ -105,8 +100,6 @@ alias xcut='xclip-cutfile'
 alias stow='stow --stow'
 alias restow='stow --restow'
 alias unstow='stow --delete'
-alias ff='__ffind'
-alias fj='__fjump'
 
 
 
@@ -116,10 +109,10 @@ alias fj='__fjump'
 
 if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\t\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;94m\]\w\[\033[00m\]'
-    [[ $(type -t __fetch_git_branch) == function ]] && PS1+='\[\033[01;33m\]$(__fetch_git_branch " (%s)")\[\033[00m\]\$ ' || PS1+='\$ '
+    PS1+='\[\033[01;33m\] $(git-branch "(%s)")\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\t \u@\h:\w'
-    [[ $(type -t __fetch_git_branch) == function ]] && PS1+='$(__fetch_git_branch " (%s)")\$ ' || PS1+='\$ '
+    PS1+=' $(git-branch "(%s)")\$ '
 fi
 
 
@@ -199,8 +192,8 @@ bind 'set colored-stats on'
 ### Keybindings (no ~/.inputrc)
 ###############################
 
-bind -m vi-command -x '"\C-l": clear'
-bind -m vi-insert -x '"\C-l": clear'
+bind -m vi-command -x '"\C-l": clear -x'
+bind -m vi-insert -x '"\C-l": clear -x'
 
 
 
