@@ -53,7 +53,7 @@ function git-branch () {
     function git-status () {
         [[ $(git status --porcelain 2>/dev/null) ]] && echo "*"
     }
-    git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(git-status))/"
+    git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(git-status))/"
 }
 # ---
 function fhook () {
@@ -67,7 +67,7 @@ function fhook () {
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return && clear -x
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `fzy -l 20 -p "$PWD $(git-branch "(%s)")> ")"; do
+          `fzy -l 20 -p "$PWD$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
@@ -109,10 +109,10 @@ alias unstow='stow --delete'
 
 if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\t\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;94m\]\w\[\033[00m\]'
-    PS1+='\[\033[01;33m\] $(git-branch "(%s)")\[\033[00m\]\$ '
+    PS1+='\[\033[01;33m\]$(git-branch "(%s)")\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\t \u@\h:\w'
-    PS1+=' $(git-branch "(%s)")\$ '
+    PS1+='$(git-branch "(%s)")\$ '
 fi
 
 
