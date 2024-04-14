@@ -60,6 +60,7 @@ function __ffind () {
     [[ -x "$(command -v fzy)" ]] || return && clear
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
           `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; do
+        FJUMP="${FJUMP%[@|*|/]}"
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
         fi
