@@ -105,7 +105,6 @@ alias xcut='xclip-cutfile'
 alias stow='stow --stow'
 alias restow='stow --restow'
 alias unstow='stow --delete'
-alias aa='cd -;clear'
 alias ff='__ffind'
 alias fj='__fjump'
 
@@ -202,6 +201,9 @@ bind 'set colored-stats on'
 
 bind -m vi-command -x '"\C-l": clear'
 bind -m vi-insert -x '"\C-l": clear'
+# ---
+bind -m vi-command -x '"\C-a": cd -'
+bind -m vi-insert -x '"\C-a": cd -'
 
 
 
