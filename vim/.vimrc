@@ -6,13 +6,17 @@
 
 
 
-" UNDODIR {{{
+" UNDODIR & LINEBREAK {{{
 if has('persistent_undo')
     if !isdirectory(expand('~/.vim/undodir'))
         execute "!mkdir -p ~/.vim/undodir &>/dev/null"
     endif
     set undodir=$HOME/.vim/undodir
     set undofile
+endif
+" ---
+if has('linebreak')
+    let &showbreak='  ~'
 endif
 " }}}
 
