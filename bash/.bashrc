@@ -72,10 +72,15 @@ function __ffind () {
 }
 # ---
 function __fjump () {
-    [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" && -z "$TMUX" ]] || return && clear
-    if FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \; | `
+    [[ -x "$(command -v fzy)" && -x "$(command -v tmux)" ]] || return && clear
+    if FPLEX="$(/usr/bin/find "$(pwd)" -type d -not -path '*/\.*' -exec realpath --relative-to="$PWD" {} \; | `
           `fzy -p "$PWD$(__fetch_git_branch " (%s)") > ")"; then
-        command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
+        [[ $FPLEX == "." ]] && FPLEX="$PWD"
+        if [[ -z "$TMUX" ]]; then
+            command tmux new-session -c "$FPLEX" -s "$(basename "$FPLEX")"
+        else
+            command tmux new-session -d -c "$FPLEX" -s "$(basename "$FPLEX")" \; switch-client -t "$(basename "$FPLEX")"
+        fi
     fi
 }
 
@@ -88,7 +93,7 @@ function __fjump () {
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" \
 "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 # ---
-alias l='ls -CF'
+alias lf='ls -CF'
 alias la='ls -A'
 alias ll='ls -alFtr'
 alias cp='cp -i'
@@ -100,6 +105,7 @@ alias xcut='xclip-cutfile'
 alias stow='stow --stow'
 alias restow='stow --restow'
 alias unstow='stow --delete'
+alias aa='cd -;clear'
 alias ff='__ffind'
 alias fj='__fjump'
 
