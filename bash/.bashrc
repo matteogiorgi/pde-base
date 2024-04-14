@@ -167,8 +167,8 @@ fi
 
 
 
-## Completion (no ~/.inputrc)
-#############################
+## Mode & binds (no ~/.inputrc)
+###############################
 
 set -o vi
 bind 'set show-mode-in-prompt on'
@@ -185,13 +185,7 @@ bind 'set completion-prefix-display-length 3'
 bind 'set mark-symlinked-directories on'
 bind 'set visible-stats on'
 bind 'set colored-stats on'
-
-
-
-
-### Keybindings (no ~/.inputrc)
-###############################
-
+# ---
 bind -m vi-command -x '"\C-l": clear -x'
 bind -m vi-insert -x '"\C-l": clear -x'
 
