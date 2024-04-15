@@ -69,7 +69,7 @@ function fjump () {
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
           `fzy -l 20 -p "$PWD$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
-        if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
+        if [[ -d "$FJUMP" ]]; then
             cd "${FJUMP}" && continue || return
         fi
         if [[ ! -f "$FJUMP" ]]; then
