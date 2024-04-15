@@ -67,7 +67,7 @@ function fhook () {
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return && clear -x
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `fzy -l 20 -p "$PWD$(git-branch "(%s)") > ")"; do
+          `fzy -l 999 -p "$PWD$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
         [[ -d "$FJUMP" ]] && { cd "${FJUMP}" || return; }
         [[ ! -f "$FJUMP" || -d "$FJUMP" ]] && continue
