@@ -69,12 +69,8 @@ function fjump () {
     while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
           `fzy -l 20 -p "$PWD$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
-        if [[ -d "$FJUMP" ]]; then
-            cd "${FJUMP}" && continue || return
-        fi
-        if [[ ! -f "$FJUMP" ]]; then
-            "${EDITOR:=vi}" "$FJUMP" && continue
-        fi
+        [[ -d "$FJUMP" ]] && { cd "${FJUMP}" || return; }
+        [[ ! -f "$FJUMP" || -d "$FJUMP" ]] && continue
         case $(/usr/bin/file --mime-type "$FJUMP" -bL) in
             text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
             *) command xdg-open "$FJUMP" &>/dev/null;;
