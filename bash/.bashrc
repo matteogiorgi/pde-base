@@ -72,6 +72,9 @@ function fjump () {
         if [[ -d "$FJUMP" || (-d "$FJUMP" && -L "$FJUMP") ]]; then
             cd "${FJUMP}" && continue || return
         fi
+        if [[ ! -f "$FJUMP" ]]; then
+            "${EDITOR:=vi}" "$FJUMP" && continue
+        fi
         case $(/usr/bin/file --mime-type "$FJUMP" -bL) in
             text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
             *) command xdg-open "$FJUMP" &>/dev/null;;
