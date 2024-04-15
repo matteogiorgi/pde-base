@@ -9,8 +9,8 @@
 
 
 
-### If running bash
-###################
+### Bash?
+#########
 
 if [ -n "$BASH_VERSION" ]; then
     [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
@@ -19,8 +19,8 @@ fi
 
 
 
-### Set PATH to include ~/.local/bin
-####################################
+### $PATH (include ~/.local/bin)
+################################
 
 mkdir -p "$HOME/.local/bin"
 PATH="$PATH:$HOME/.local/bin"
@@ -28,8 +28,8 @@ PATH="$PATH:$HOME/.local/bin"
 
 
 
-### Environment variables
-#########################
+### Env-variables
+#################
 
 export EDITOR="/usr/bin/vi"
 export VISUAL="/usr/bin/vi"

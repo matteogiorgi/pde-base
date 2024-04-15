@@ -7,8 +7,8 @@
 
 
 
-### Interactive mode
-####################
+### Interactive
+###############
 
 case $- in
     *i*) ;;
@@ -18,7 +18,7 @@ esac
 
 
 
-### History & options
+### History & Options
 #####################
 
 HISTCONTROL=ignoreboth
@@ -32,7 +32,7 @@ shopt -s globstar
 
 
 
-### Lesspipe & chroot
+### Lesspipe & Chroot
 #####################
 
 if [[ -x /usr/bin/lesspipe ]]; then
@@ -118,8 +118,8 @@ fi
 
 
 
-### Bash completion
-###################
+### Completion
+##############
 
 if ! shopt -oq posix; then
     if [[ -f /usr/share/bash-completion/bash_completion ]]; then
@@ -132,8 +132,8 @@ fi
 
 
 
-### Export env-variables
-########################
+### Env-variables
+#################
 
 export TERM='xterm-256color'
 export SHELL='/usr/bin/bash'
@@ -142,7 +142,7 @@ export PAGER='/usr/bin/less -~'
 
 
 
-### Color support
+### Color-support
 #################
 
 export LESS_TERMCAP_mb=$'\e[01;31m'
@@ -167,7 +167,7 @@ fi
 
 
 
-## Mode & binds (no ~/.inputrc)
+## Mode & Binds (no ~/.inputrc)
 ###############################
 
 set -o vi
@@ -192,8 +192,8 @@ bind -m vi-insert -x '"\C-l": clear -x'
 
 
 
-### Add more inside ~/.extrarc
-##############################
+### Extra-source (~/.extrarc)
+#############################
 
 if [[ -f "$HOME/.extrarc" ]]; then
     . "$HOME/.extrarc"

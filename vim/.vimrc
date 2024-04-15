@@ -6,7 +6,7 @@
 
 
 
-" UNDODIR & LINEBREAK {{{
+" Undodir & Linebreak {{{
 if has('persistent_undo')
     if !isdirectory(expand('~/.vim/undodir'))
         execute "!mkdir -p ~/.vim/undodir &>/dev/null"
@@ -23,7 +23,7 @@ endif
 
 
 
-" LEADERS & CARET {{{
+" Leaders & Caret {{{
 let g:mapleader = "\<Space>"
 let g:maplocalleader = "\\"
 let &t_SI = "\e[6 q"
@@ -33,7 +33,7 @@ let &t_EI = "\e[2 q"
 
 
 
-" SYNTAX & FILETYPE {{{
+" Syntax & Filetype {{{
 syntax on
 filetype plugin indent on
 colorscheme lunaperche
@@ -42,7 +42,7 @@ colorscheme lunaperche
 
 
 
-" OPTIONS {{{
+" Options {{{
 set exrc
 set title
 set shell=bash
@@ -105,7 +105,7 @@ endif
 
 
 
-" FUNCTIONS {{{
+" Functions {{{
 function! s:ToggleQF()
     let g:loclist = 'lclose'
     let g:quickfix = !exists("g:quickfix") || g:quickfix ==# 'cclose' ? 'copen' : 'cclose'
@@ -150,7 +150,7 @@ endfunction
 
 
 
-" AUGROUPS {{{
+" Augroups {{{
 augroup netrw_prettyfier
     autocmd!
     autocmd FileType netrw
@@ -216,7 +216,7 @@ augroup end
 
 
 
-" COMMANDS {{{
+" Commands {{{
 command! ClearSearch
       \ silent! execute 'let @/=""'|
       \ echo 'cleared last search'
@@ -236,7 +236,7 @@ endif
 
 
 
-" KEYMAPS {{{
+" Keymaps {{{
 noremap <silent><C-h> (
 noremap <silent><C-l> )
 noremap <silent><C-j> }
