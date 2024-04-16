@@ -37,6 +37,8 @@ let &t_EI = "\e[2 q"
 syntax on
 filetype plugin indent on
 colorscheme lunaperche
+set background=dark
+hi VertSplit ctermbg=NONE guibg=NONE
 " }}}
 
 
