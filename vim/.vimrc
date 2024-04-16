@@ -38,9 +38,6 @@ syntax on
 filetype plugin indent on
 colorscheme lunaperche
 set background=dark
-hi! VertSplit
-      \ ctermbg=NONE
-      \ guibg=NONE
 " }}}
 
 
