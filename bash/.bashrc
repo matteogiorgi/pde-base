@@ -56,20 +56,10 @@ function git-branch () {
     command git branch --no-color 2>/dev/null | command sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(git-status))/"
 }
 # ---
-function fhook () {
-    [[ -x "$(command -v tmux)" ]] || return && command clear -x
-    [[ -n "$TMUX" ]] && { command tmux detach && return; }
-    BASENAME="$(command basename "$PWD")"
-    if command tmux has-session -t "$BASENAME" 2>/dev/null; then
-        command tmux attach -t "$BASENAME" && return
-    fi
-    command tmux new-session -c "$PWD" -s "$BASENAME"
-}
-# ---
 function fjump () {
-    [[ -x "$(command -v fzy)" ]] || return && command clear -x
+    [[ -x "$(command -v fzy)" ]] || return
     while FJUMP="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `command fzy -l 999 -p "$PWD$(git-branch "(%s)") > ")"; do
+          `command fzy -l 20 -p "$(pwd | sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
         [[ -d "$FJUMP" ]] && { cd "${FJUMP}" || return; }
         [[ ! -f "$FJUMP" || -d "$FJUMP" ]] && continue
@@ -78,6 +68,24 @@ function fjump () {
             *) command xdg-open "$FJUMP" &>/dev/null;;
         esac
     done
+}
+# ---
+function fhook () {
+    [[ -x "$(command -v tmux)" && -x "$(command -v fzy)" ]] || return
+    [[ -n "$TMUX" ]] && { command tmux detach && return; }
+    BASENAME="$(command basename "$PWD" | command cut -c 1-40)"
+    SESSIONS="$(command tmux list-sessions -F '#{session_name}' 2>/dev/null)"
+    SCOUNTER="$(command tmux list-sessions 2>/dev/null | wc -l)"
+    if command tmux has-session -t "$BASENAME" 2>/dev/null; then
+        FHOOK="$(echo "$SESSIONS" | command fzy -l 20 -p "$SCOUNTER tmux-sessions > ")"
+        [[ -n "$FHOOK" ]] && command tmux attach -t "$FHOOK"
+        return
+    fi
+    FHOOK="$( (echo "$BASENAME (new)"; echo "$SESSIONS") | command fzy -l 20 -p "$SCOUNTER tmux-sessions > " )"
+    if [[ -n "$FHOOK" ]]; then
+        [[ "$FHOOK" == "$BASENAME (new)"  ]] && { command tmux new-session -c "$PWD" -s "$BASENAME" && return; }
+        command tmux attach -t "$FHOOK"
+    fi
 }
 
 
