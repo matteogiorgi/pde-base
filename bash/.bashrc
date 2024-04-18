@@ -73,15 +73,15 @@ function fjump () {
 function fhook () {
     [[ -x "$(command -v tmux)" && -x "$(command -v fzy)" ]] || return
     [[ -n "$TMUX" ]] && { command tmux detach && return; }
-    BASENAME="$(command basename "$PWD" | command cut -c 1-40)"
+    BASENAME="$(command basename "$PWD" | command cut -c 1-37)"
     SESSIONS="$(command tmux list-sessions -F '#{session_name}' 2>/dev/null)"
     SCOUNTER="$(command tmux list-sessions 2>/dev/null | wc -l)"
     if command tmux has-session -t "$BASENAME" 2>/dev/null; then
-        FHOOK="$(echo "$SESSIONS" | command fzy -l 20 -p "$SCOUNTER tmux-sessions > ")"
+        FHOOK="$(echo "$SESSIONS" | command fzy -l 20 -p "tmux-sessions ($SCOUNTER) > ")"
         [[ -n "$FHOOK" ]] && command tmux attach -t "$FHOOK"
         return
     fi
-    FHOOK="$( (echo "$BASENAME (new)"; echo "$SESSIONS") | command fzy -l 20 -p "$SCOUNTER tmux-sessions > " )"
+    FHOOK="$( (echo "$BASENAME (new)"; echo "$SESSIONS") | command fzy -l 20 -p "tmux-sessions ($SCOUNTER) > " )"
     if [[ -n "$FHOOK" ]]; then
         [[ "$FHOOK" == "$BASENAME (new)"  ]] && { command tmux new-session -c "$PWD" -s "$BASENAME" && return; }
         command tmux attach -t "$FHOOK"
