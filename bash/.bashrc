@@ -51,28 +51,30 @@ fi
 
 function git-branch () {
     function git-status () {
-        [[ $(git status --porcelain 2>/dev/null) ]] && echo "*"
+        [[ $(command git status --porcelain 2>/dev/null) ]] && echo "*"
     }
-    git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(git-status))/"
+    command git branch --no-color 2>/dev/null | command sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(git-status))/"
 }
 # ---
 function fhook () {
-    [[ -x "$(command -v tmux)" ]] || return && clear -x
-    case "$TMUX" in
-        "") command tmux new-session -c "$PWD" -s "$(basename "$PWD")";;
-        *) command tmux new-session -d -c "$PWD" -s "$(basename "$PWD")" \; switch-client -t "$(basename "$PWD")";;
-    esac
+    [[ -x "$(command -v tmux)" ]] || return && command clear -x
+    [[ -n "$TMUX" ]] && { command tmux detach && return; }
+    BASENAME="$(command basename "$PWD")"
+    if command tmux has-session -t "$BASENAME" 2>/dev/null; then
+        command tmux attach -t "$BASENAME" && return
+    fi
+    command tmux new-session -c "$PWD" -s "$BASENAME"
 }
 # ---
 function fjump () {
-    [[ -x "$(command -v fzy)" ]] || return && clear -x
-    while FJUMP="$(/usr/bin/ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `fzy -l 999 -p "$PWD$(git-branch "(%s)") > ")"; do
+    [[ -x "$(command -v fzy)" ]] || return && command clear -x
+    while FJUMP="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
+          `command fzy -l 999 -p "$PWD$(git-branch "(%s)") > ")"; do
         FJUMP="${FJUMP%[@|*|/]}"
         [[ -d "$FJUMP" ]] && { cd "${FJUMP}" || return; }
         [[ ! -f "$FJUMP" || -d "$FJUMP" ]] && continue
-        case $(/usr/bin/file --mime-type "$FJUMP" -bL) in
-            text/* | application/json) "${EDITOR:=vi}" "$FJUMP";;
+        case $(command file --mime-type "$FJUMP" -bL) in
+            text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FJUMP";;
             *) command xdg-open "$FJUMP" &>/dev/null;;
         esac
     done
