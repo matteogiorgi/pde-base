@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This '.vidot' setup script will install a minimal work environment complete
+# This '.debdot' setup script will install a minimal work environment complete
 # with all the bells and whistles needed to start working properly.
 # ---
 # There are no worries of losing a potential old configuration: il will be
@@ -27,11 +27,11 @@ __warning () {
 }
 # ---
 __restore () {
-    if [[ ! -d "$HOME/.vidot_restore" ]]; then
-        mkdir "$HOME/.vidot_restore"
-        RESTORE="$HOME/.vidot_restore"
+    if [[ ! -d "$HOME/.debdot_restore" ]]; then
+        mkdir "$HOME/.debdot_restore"
+        RESTORE="$HOME/.debdot_restore"
     else
-        printf "${RED}%s${NC}\n" "'.vidot' is already set"
+        printf "${RED}%s${NC}\n" "'.debdot' is already set"
         exit 1
     fi
 }
