@@ -15,7 +15,7 @@
 RED='\033[1;36m'
 NC='\033[0m'
 # ---
-__warning () {
+function warning-message () {
     if [ "$(id -u)" = 0 ]; then
         printf "\n${RED}%s${NC}"     "This script MUST NOT be run as root user since it makes changes"
         printf "\n${RED}%s${NC}"     "to the \$HOME directory of the \$USER executing this script."
@@ -26,7 +26,7 @@ __warning () {
     fi
 }
 # ---
-__restore () {
+function restore-debdot () {
     if [[ ! -d "$HOME/.debdot_restore" ]]; then
         mkdir "$HOME/.debdot_restore"
         RESTORE="$HOME/.debdot_restore"
@@ -36,13 +36,13 @@ __restore () {
     fi
 }
 # ---
-__error () {
+function error-echo () {
     clear
     printf "${RED}ERROR: %s${NC}\n" "$1" >&2
     exit 1
 }
 # ---
-__clean () {
+function clean-dot () {
     if [[ -L $1 ]]; then
         unlink "$1"
     else
@@ -50,14 +50,14 @@ __clean () {
     fi
 }
 # ---
-__backup () {
-    [[ -f "$HOME/.bash_logout" ]] && _clean "$HOME/.bash_logout"
-    [[ -f "$HOME/.bashrc" ]] && _clean "$HOME/.bashrc"
-    [[ -f "$HOME/.profile" ]] && _clean "$HOME/.profile"
+function backup-debdot () {
+    [[ -f "$HOME/.bash_logout" ]] && clean-dot "$HOME/.bash_logout"
+    [[ -f "$HOME/.bashrc" ]] && clean-dot "$HOME/.bashrc"
+    [[ -f "$HOME/.profile" ]] && clean-dot "$HOME/.profile"
     # ---
-    [[ -f "$HOME/.tmux.conf" ]] && _clean "$HOME/.tmux.conf"
+    [[ -f "$HOME/.tmux.conf" ]] && clean-dot "$HOME/.tmux.conf"
     # ---
-    [[ -f "$HOME/.vimrc" ]] && _clean "$HOME/.vimrc"
+    [[ -f "$HOME/.vimrc" ]] && clean-dot "$HOME/.vimrc"
 }
 
 
@@ -67,14 +67,14 @@ __backup () {
 #########
 
 clear
-__warning
+warning-message
 # ---
-sudo apt-get update && sudo apt-get upgrade -qq -y || __error "syncing repos"
+sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 sudo apt-get install -qq -y  git stow xclip trash-cli fzy bash bash-completion \
-    tmux vim-gtk3 wamerican fonts-firacode || __error "installing packages"
+    tmux vim-gtk3 wamerican fonts-firacode || error-echo "installing packages"
 # ---
-__restore
-__backup
+restore-debdot
+backup-debdot
 stow bash
 stow tmux
 stow vim
