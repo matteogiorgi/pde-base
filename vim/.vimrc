@@ -75,7 +75,7 @@ set sessionoptions=blank,buffers,curdir,folds,tabpages,help,options,winsize
 set colorcolumn=
 set cmdheight=1
 set nrformats-=alpha
-set fillchars=vert:┃,fold:━
+set fillchars=vert:┃,fold:━,eob:╺
 set laststatus=2 showtabline=1
 set nocompatible
 set esckeys
