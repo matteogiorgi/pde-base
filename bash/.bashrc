@@ -72,14 +72,14 @@ function ffind () {
 # ---
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return && command clear -x
-    FJUMP="$(command find "$(pwd)" -type d -not -path '*/\.*' -exec realpath {} \; | `
+    FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.' | sed 's|^\./||' | `
           `command fzy -l 99 -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
     [[ -d "$FJUMP" ]] && { cd "$FJUMP" || return; }
 }
 # ---
 function fhook () {
     [[ -x "$(command -v tmux)" && -x "$(command -v fzy)" ]] || return
-    [[ -n "$TMUX" ]] && { command tmux detach && return; } || command clear -x
+    [[ -z "$TMUX" ]] || { command tmux detach && return; } && command clear -x
     BASENAME="$(command basename "$PWD" | command cut -c 1-37)"
     SESSIONS="$(command tmux list-sessions -F '#{session_name}' 2>/dev/null)"
     SCOUNTER="$(command tmux list-sessions 2>/dev/null | wc -l)"
