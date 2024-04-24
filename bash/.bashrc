@@ -57,9 +57,9 @@ function git-branch () {
 }
 # ---
 function ffind () {
-    [[ -x "$(command -v fzy)" ]] || return && command clear -x
+    [[ -x "$(command -v fzy)" ]] || return
     while FFIND="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `command fzy -l 99 -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
+          `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
         FFIND="${FFIND%[@|*|/]}"
         [[ -d "$FFIND" ]] && { cd "$FFIND" || return; }
         [[ ! -f "$FFIND" || -d "$FFIND" ]] && continue
@@ -71,39 +71,36 @@ function ffind () {
 }
 # ---
 function fjump () {
-    [[ -x "$(command -v fzy)" ]] || return && command clear -x
+    [[ -x "$(command -v fzy)" ]] || return
     FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.' | sed 's|^\./||' | `
-          `command fzy -l 99 -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
+          `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
     [[ -d "$FJUMP" ]] && { cd "$FJUMP" || return; }
 }
 # ---
 function fhook () {
     [[ -x "$(command -v tmux)" && -x "$(command -v fzy)" ]] || return
-    [[ -z "$TMUX" ]] || { command tmux detach && return; } && command clear -x
+    [[ -z "$TMUX" ]] || { command tmux display-message -p 'attached to #S' 2>/dev/null; return; }
     BASENAME="$(command basename "$PWD" | command cut -c 1-37)"
     SESSIONS="$(command tmux list-sessions -F '#{session_name}' 2>/dev/null)"
     SCOUNTER="$(command tmux list-sessions 2>/dev/null | wc -l)"
     if command tmux has-session -t "$BASENAME" 2>/dev/null; then
-        FHOOK="$(echo "$SESSIONS" | command fzy -l 99 -p "tmux-sessions ($SCOUNTER) > ")"
-        [[ -n "$FHOOK" ]] && command tmux attach -t "$FHOOK"
-        return
-    fi
-    FHOOK="$( (echo "$BASENAME (new)"; echo "$SESSIONS") | command fzy -l 20 -p "tmux-sessions ($SCOUNTER) > " )"
-    if [[ -n "$FHOOK" ]]; then
-        [[ "$FHOOK" == "$BASENAME (new)"  ]] && { command tmux new-session -c "$PWD" -s "$BASENAME" && return; }
+        if FHOOK="$(echo "$SESSIONS" | command fzy -p "tmux-sessions ($SCOUNTER) > ")"; then
+            command tmux attach -t "$FHOOK"
+        fi
+    elif FHOOK="$( (echo "$BASENAME (new)"; echo "$SESSIONS") | command fzy -p "tmux-sessions ($SCOUNTER) > " )"; then
+        [[ "$FHOOK" == "$BASENAME (new)"  ]] && { command tmux new-session -c "$PWD" -s "$BASENAME"; return; }
         command tmux attach -t "$FHOOK"
     fi
 }
 # ---
 function fgit() {
-    [[ -x "$(command -v git)" && -x "$(command -v fzy)" ]] || return && command clear -x
-    [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == "true" ]] || { echo "not a git repo" && return; }
-    while FGIT="$(command git log --graph --format="%h%d %s %cr" "$@" | `
-          `command fzy -l 99 -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
+    [[ -x "$(command -v git)" && -x "$(command -v fzy)" ]] || return
+    [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == "true" ]] || { echo "not a git repo"; return; }
+    if FGIT="$(command git log --graph --format="%h%d %s %cr" "$@" | `
+          `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; then
         FGIT="$(echo "$FGIT" | grep -o '[a-f0-9]\{7\}')"
         command git diff "$FGIT"
-        command clear -x
-    done
+    fi
 }
 
 
