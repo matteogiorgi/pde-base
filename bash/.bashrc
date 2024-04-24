@@ -79,7 +79,7 @@ function fjump () {
 # ---
 function fhook () {
     [[ -x "$(command -v tmux)" && -x "$(command -v fzy)" ]] || return
-    [[ -z "$TMUX" ]] || { command tmux display-message -p 'attached to #S' 2>/dev/null; return; }
+    [[ -z "$TMUX" ]] || { command tmux display-message -p 'attached to #S'; return; }
     BASENAME="$(command basename "$PWD" | command cut -c 1-37)"
     SESSIONS="$(command tmux list-sessions -F '#{session_name}' 2>/dev/null)"
     SCOUNTER="$(command tmux list-sessions 2>/dev/null | wc -l)"
