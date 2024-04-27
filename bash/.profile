@@ -33,3 +33,13 @@ PATH="$PATH:$HOME/.local/bin"
 
 export EDITOR="/usr/bin/vi"
 export VISUAL="/usr/bin/vi"
+
+
+
+
+### Remaps
+##########
+
+if [ -x "$(command -v setxkbmap)" ]; then
+    command setxkbmap -option "caps:swapescape"
+fi
