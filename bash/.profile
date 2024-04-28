@@ -9,8 +9,8 @@
 
 
 
-### Bash?
-#########
+### Bourn-Again Shell
+#####################
 
 if [ -n "$BASH_VERSION" ]; then
     [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
@@ -28,18 +28,8 @@ PATH="$PATH:$HOME/.local/bin"
 
 
 
-### Env-variables
+### Env-Variables
 #################
 
 export EDITOR="/usr/bin/vi"
 export VISUAL="/usr/bin/vi"
-
-
-
-
-### Remaps
-##########
-
-if [ -x "$(command -v setxkbmap)" ]; then
-    command setxkbmap -option "caps:swapescape"
-fi
