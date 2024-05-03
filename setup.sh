@@ -9,8 +9,8 @@
 
 
 
-### Functions
-#############
+### Check & Funcs
+#################
 
 RED='\033[1;36m'
 NC='\033[0m'
@@ -37,6 +37,7 @@ function restore-debdot () {
 }
 # ---
 function error-echo () {
+    clear -x
     printf "${RED}ERROR: %s${NC}\n" "$1" >&2
     exit 1
 }
@@ -63,14 +64,12 @@ function backup-debdot () {
 warning-message
 # ---
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
-sudo apt-get install -qq -y  git stow xclip trash-cli fzy bash bash-completion tmux \
-    vim-gtk3 wamerican fonts-firacode input-remapper || error-echo "installing packages"
+sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux vim-gtk3 \
+      wamerican fzy fonts-firacode input-remapper || error-echo "installing packages"
 # ---
 restore-debdot
 backup-debdot
-stow bash
-stow tmux
-stow vim
+stow bash tmux vim
 
 
 
