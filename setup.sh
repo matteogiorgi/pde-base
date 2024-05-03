@@ -16,7 +16,7 @@ RED='\033[1;36m'
 NC='\033[0m'
 # ---
 function warning-message () {
-    if [ "$(id -u)" = 0 ]; then
+    if [[ "$(id -u)" = 0 ]]; then
         printf "\n${RED}%s${NC}"     "This script MUST NOT be run as root user since it makes changes"
         printf "\n${RED}%s${NC}"     "to the \$HOME directory of the \$USER executing this script."
         printf "\n${RED}%s${NC}"     "The \$HOME directory of the root user is, of course, '/root'."
@@ -37,27 +37,21 @@ function restore-debdot () {
 }
 # ---
 function error-echo () {
-    clear
     printf "${RED}ERROR: %s${NC}\n" "$1" >&2
     exit 1
 }
 # ---
-function clean-dot () {
-    if [[ -L $1 ]]; then
-        unlink "$1"
-    else
-        mv "$1" "$RESTORE"
-    fi
-}
-# ---
 function backup-debdot () {
-    [[ -f "$HOME/.bash_logout" ]] && clean-dot "$HOME/.bash_logout"
-    [[ -f "$HOME/.bashrc" ]] && clean-dot "$HOME/.bashrc"
-    [[ -f "$HOME/.profile" ]] && clean-dot "$HOME/.profile"
-    # ---
-    [[ -f "$HOME/.tmux.conf" ]] && clean-dot "$HOME/.tmux.conf"
-    # ---
-    [[ -f "$HOME/.vimrc" ]] && clean-dot "$HOME/.vimrc"
+    function clean-debdot () {
+        if [[ -f "$1" ]]; then
+            [[ ! -L "$1" ]] || mv "$1" "$RESTORE" && unlink "$1"
+        fi
+    }
+    clean-debdot "$HOME/.bash_logout"
+    clean-debdot "$HOME/.bashrc"
+    clean-debdot "$HOME/.profile"
+    clean-debdot "$HOME/.tmux.conf"
+    clean-debdot "$HOME/.vimrc"
 }
 
 
@@ -66,7 +60,6 @@ function backup-debdot () {
 ### Start
 #########
 
-clear
 warning-message
 # ---
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
