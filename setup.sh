@@ -65,7 +65,7 @@ warning-message
 # ---
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux vim-gtk3 \
-      wamerican fzy fonts-firacode input-remapper || error-echo "installing packages"
+      wamerican fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
 restore-debdot
 backup-debdot
