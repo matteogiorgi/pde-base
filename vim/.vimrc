@@ -6,13 +6,22 @@
 
 
 
-" Undodir & Linebreak {{{
+" Undodir {{{
 if has('persistent_undo')
     if !isdirectory(expand('~/.vim/undodir'))
         execute "!mkdir -p ~/.vim/undodir &>/dev/null"
     endif
     set undodir=$HOME/.vim/undodir
     set undofile
+endif
+" }}}
+
+
+
+
+" Python3 & Linebreak {{{
+if has('python3')
+    let g:python3_host_prog = '/usr/bin/python3'
 endif
 " ---
 if has('linebreak')
