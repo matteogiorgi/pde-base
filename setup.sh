@@ -41,7 +41,7 @@ function error-echo () {
 function restore-debdot () {
     function backup-debdot () {
         if [[ -f "$1" ]]; then
-            [[ ! -L "$1" ]] || mv "$1" "${RESTORE}" && unlink "$1"
+            [[ ! -L "$1" ]] || mv "$1" "${RESTORE}" && command unlink "$1"
         fi
     }
     RESTORE="${HOME}/.debdot_restore" && mkdir "${RESTORE}"
@@ -64,7 +64,7 @@ sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux 
       wamerican fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
 restore-debdot
-stow bash tmux vim
+command stow bash tmux vim
 
 
 
