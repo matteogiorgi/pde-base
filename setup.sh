@@ -15,6 +15,12 @@
 RED='\033[1;36m'
 NC='\033[0m'
 # ---
+if [[ -d "$HOME/.debdot_restore" ]]; then
+    printf "\n${RED}%s${NC}"   "═══════ Warning: .debdot set ══════"
+    printf "\n${RED}%s${NC}\n" "Remove it and run this script again"
+    exit 1
+fi
+# ---
 function warning-message () {
     if [[ "$(id -u)" = 0 ]]; then
         printf "\n${RED}%s${NC}"     "This script MUST NOT be run as root user since it makes changes"
@@ -26,33 +32,24 @@ function warning-message () {
     fi
 }
 # ---
-function restore-debdot () {
-    if [[ ! -d "$HOME/.debdot_restore" ]]; then
-        mkdir "$HOME/.debdot_restore"
-        RESTORE="$HOME/.debdot_restore"
-    else
-        printf "${RED}%s${NC}\n" "'.debdot' is already set"
-        exit 1
-    fi
-}
-# ---
 function error-echo () {
     clear -x
     printf "${RED}ERROR: %s${NC}\n" "$1" >&2
     exit 1
 }
 # ---
-function backup-debdot () {
-    function clean-debdot () {
+function restore-debdot () {
+    function backup-debdot () {
         if [[ -f "$1" ]]; then
-            [[ ! -L "$1" ]] || mv "$1" "$RESTORE" && unlink "$1"
+            [[ ! -L "$1" ]] || mv "$1" "${RESTORE}" && unlink "$1"
         fi
     }
-    clean-debdot "$HOME/.bash_logout"
-    clean-debdot "$HOME/.bashrc"
-    clean-debdot "$HOME/.profile"
-    clean-debdot "$HOME/.tmux.conf"
-    clean-debdot "$HOME/.vimrc"
+    RESTORE="${HOME}/.debdot_restore" && mkdir "${RESTORE}"
+    backup-debdot "${HOME}/.bash_logout"
+    backup-debdot "${HOME}/.bashrc"
+    backup-debdot "${HOME}/.profile"
+    backup-debdot "${HOME}/.tmux.conf"
+    backup-debdot "${HOME}/.vimrc"
 }
 
 
@@ -62,13 +59,11 @@ function backup-debdot () {
 #########
 
 warning-message
-# ---
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux vim-gtk3 \
       wamerican fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
 restore-debdot
-backup-debdot
 stow bash tmux vim
 
 
