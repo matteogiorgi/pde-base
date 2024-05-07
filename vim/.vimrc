@@ -58,7 +58,7 @@ set title
 set shell=bash
 set runtimepath+=~/.vim_runtime
 set clipboard=unnamedplus
-set number relativenumber mouse=a
+set number relativenumber mouse=a ttymouse=xterm2
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set ruler scrolloff=8 sidescrolloff=16
 set autoindent
