@@ -6,6 +6,15 @@
 
 
 
+" Vim9? {{{
+if v:version < 900
+    finish
+endif
+" }}}
+
+
+
+
 " Undodir {{{
 if has('persistent_undo')
     if !isdirectory(expand('~/.vim/undodir'))
