@@ -58,23 +58,38 @@ function git-branch () {
 # ---
 function ffind () {
     [[ -x "$(command -v fzy)" ]] || return
-    while FFIND="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
-          `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
-        FFIND="${FFIND%[@|*|/]}"
-        [[ -d "$FFIND" ]] && { cd "$FFIND" || return; }
-        [[ ! -f "$FFIND" || -d "$FFIND" ]] && continue
-        case $(command file --mime-type "$FFIND" -bL) in
-            text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FFIND";;
-            *) command xdg-open "$FFIND" &>/dev/null;;
-        esac
-    done
+    TMP="/tmp/ffind$$"
+    (
+        while FFIND="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
+              `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
+            FFIND="$PWD/${FFIND%[@|*|/]}"
+            if [[ -d "$FFIND" ]]; then
+                cd "$FFIND" || return
+                printf '%s\n' "$FFIND" > "$TMP"
+                continue
+            fi
+            case $(command file --mime-type "$FFIND" -bL) in
+                text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FFIND";;
+                *) command xdg-open "$FFIND" &>/dev/null;;
+            esac
+        done
+    )
+    [[ -f "$TMP" ]] || return
+    cd "$(command cat $TMP)" || return
+    rm -f "$TMP"
 }
 # ---
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return
-    FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.' | sed 's|^\./||' | `
-          `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
-    [[ -d "$FJUMP" ]] && { cd "$FJUMP" || return; }
+    TMP="/tmp/fjump$$"
+    (
+        FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.' | sed 's|^\./||' | `
+              `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
+        [[ -d "$FJUMP" ]] && printf '%s\n' "$FJUMP" > "$TMP"
+    )
+    [[ -f "$TMP" ]] || return
+    cd "$(command cat $TMP)" || return
+    rm -f "$TMP"
 }
 # ---
 function fhook () {
@@ -133,10 +148,10 @@ alias unstow='stow --delete'
 
 if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\t\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;94m\]\w\[\033[00m\]'
-    PS1+='\[\033[01;33m\]$(git-branch "(%s)")\[\033[00m\]\$ '
+    PS1+='\[\033[01;33m\]$(git-branch "(%s)")\[\033[00m\]\n '
 else
     PS1='${debian_chroot:+($debian_chroot)}\t \u@\h:\w'
-    PS1+='$(git-branch "(%s)")\$ '
+    PS1+='$(git-branch "(%s)")\n '
 fi
 
 
@@ -196,8 +211,8 @@ fi
 
 set -o vi
 bind 'set show-mode-in-prompt on'
-bind 'set vi-ins-mode-string "▘"'
-bind 'set vi-cmd-mode-string "▖"'
+bind 'set vi-ins-mode-string ">>"'
+bind 'set vi-cmd-mode-string "<<"'
 # ---
 bind 'TAB:menu-complete'
 bind '"\e[Z":menu-complete-backward'
@@ -210,8 +225,16 @@ bind 'set mark-symlinked-directories on'
 bind 'set visible-stats on'
 bind 'set colored-stats on'
 # ---
-bind -m vi-command -x '"\C-l": clear -x'
-bind -m vi-insert -x '"\C-l": clear -x'
+bind -m vi-command -x '"\C-l": clear -x && echo ${PS1@P}'
+bind -m vi-command -x '"\C-f": ffind && echo ${PS1@P}'
+bind -m vi-command -x '"\C-j": fjump && echo ${PS1@P}'
+bind -m vi-command -x '"\C-k": fhook'
+bind -m vi-command -x '"\C-g": fgit'
+bind -m vi-insert -x '"\C-l": clear -x && echo ${PS1@P}'
+bind -m vi-insert -x '"\C-f": ffind && echo ${PS1@P}'
+bind -m vi-insert -x '"\C-j": fjump && echo ${PS1@P}'
+bind -m vi-insert -x '"\C-k": fhook'
+bind -m vi-insert -x '"\C-g": fgit'
 
 
 
