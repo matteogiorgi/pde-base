@@ -81,10 +81,10 @@ function ffind () {
 # ---
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return
+    [[ -x "$(command -v fdfind)" ]] && FJUMP="$(command fdfind . --type directory)" || FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.')"
     TMP="/tmp/fjump$$"
     (
-        FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.' | sed 's|^\./||' | `
-              `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
+        FJUMP="$(echo "$FJUMP" | command sed 's|^\./||' | command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
         [[ -d "$FJUMP" ]] && printf '%s\n' "$FJUMP" > "$TMP"
     )
     [[ -f "$TMP" ]] || return
