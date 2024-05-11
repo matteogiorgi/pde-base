@@ -81,10 +81,12 @@ function ffind () {
 # ---
 function fjump () {
     [[ -x "$(command -v fzy)" ]] || return
-    [[ -x "$(command -v fdfind)" ]] && FJUMP="$(command fdfind . --type directory)" || FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.')"
+    [[ -x "$(command -v fdfind)" ]] && FJUMP="$(command fdfind . --type directory)" || \
+          FJUMP="$(command find . -type d -not -path '*/\.*' -not -path '.')"
     TMP="/tmp/fjump$$"
     (
-        FJUMP="$(echo "$FJUMP" | command sed 's|^\./||' | command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
+        FJUMP="$(echo "$FJUMP" | command sed 's|^\./||' | \
+              command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
         [[ -d "$FJUMP" ]] && printf '%s\n' "$FJUMP" > "$TMP"
     )
     [[ -f "$TMP" ]] || return
@@ -148,10 +150,10 @@ alias unstow='stow --delete'
 
 if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;90m\]\t\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;94m\]\w\[\033[00m\]'
-    PS1+='\[\033[01;33m\]$(git-branch "(%s)")\[\033[00m\]\n '
+    PS1+='\[\033[01;33m\]$(git-branch "(%s)")\[\033[00m\]\n'
 else
     PS1='${debian_chroot:+($debian_chroot)}\t \u@\h:\w'
-    PS1+='$(git-branch "(%s)")\n '
+    PS1+='$(git-branch "(%s)")\n'
 fi
 
 
@@ -211,8 +213,8 @@ fi
 
 set -o vi
 bind 'set show-mode-in-prompt on'
-bind 'set vi-ins-mode-string ">>"'
-bind 'set vi-cmd-mode-string "<<"'
+bind 'set vi-ins-mode-string ">> "'
+bind 'set vi-cmd-mode-string "<< "'
 # ---
 bind 'TAB:menu-complete'
 bind '"\e[Z":menu-complete-backward'
