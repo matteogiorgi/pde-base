@@ -213,8 +213,8 @@ fi
 
 set -o vi
 bind 'set show-mode-in-prompt on'
-bind 'set vi-ins-mode-string ">>"'
-bind 'set vi-cmd-mode-string "<<"'
+bind 'set vi-ins-mode-string ">"'
+bind 'set vi-cmd-mode-string "$"'
 # ---
 bind 'TAB:menu-complete'
 bind '"\e[Z":menu-complete-backward'
