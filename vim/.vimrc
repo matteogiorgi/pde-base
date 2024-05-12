@@ -6,7 +6,7 @@
 
 
 
-" Vim9? {{{
+" Vim9 {{{
 if v:version < 900
     finish
 endif
