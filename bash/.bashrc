@@ -234,13 +234,3 @@ bind -m vi-insert -x '"\C-f": ffind && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-k": fhook'
 bind -m vi-insert -x '"\C-g": fgit'
-
-
-
-
-### Extra-source (~/.extrarc)
-#############################
-
-if [[ -f "$HOME/.extrarc" ]]; then
-    . "$HOME/.extrarc"
-fi

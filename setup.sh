@@ -69,11 +69,11 @@ sudo apt-get install -qq -y git xclip trash-cli bash bash-completion tmux vim-gt
       fd-find fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
 store-conf
-cp "${SCRIPTPATH}/.bash_logout" "${HOME}/"
-cp "${SCRIPTPATH}/.bashrc" "${HOME}/"
-cp "${SCRIPTPATH}/.profile" "${HOME}/"
-cp "${SCRIPTPATH}/.tmux.conf" "${HOME}/"
-cp "${SCRIPTPATH}/.vimrc" "${HOME}/"
+cp "${SCRIPTPATH}/bash/.bash_logout" "${HOME}/"
+cp "${SCRIPTPATH}/bash/.bashrc" "${HOME}/"
+cp "${SCRIPTPATH}/bash/.profile" "${HOME}/"
+cp "${SCRIPTPATH}/tmux/.tmux.conf" "${HOME}/"
+cp "${SCRIPTPATH}/vim/.vimrc" "${HOME}/"
 
 
 
