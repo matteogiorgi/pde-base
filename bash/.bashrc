@@ -138,9 +138,6 @@ alias rm='rm -i'
 alias xcopy='xclip-copyfile'
 alias xpasta='xclip-pastefile'
 alias xcut='xclip-cutfile'
-alias stow='stow --stow'
-alias restow='stow --restow'
-alias unstow='stow --delete'
 
 
 
