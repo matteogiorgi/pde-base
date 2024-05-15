@@ -16,8 +16,8 @@ RED='\033[1;36m'
 NC='\033[0m'
 # ---
 if [[ -d "$HOME/.debdot_restore" ]]; then
-    printf "\n${RED}%s${NC}"   "═══════ Warning: .debdot set ══════"
-    printf "\n${RED}%s${NC}\n" "Remove it and run this script again"
+    printf "\n${RED}%s${NC}"   "═══════ Warning: .debdot already installed ═══════"
+    printf "\n${RED}%s${NC}\n" "Remove ~/.debdot_restore and run this script again"
     exit 1
 fi
 # ---
