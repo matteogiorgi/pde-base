@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# This '.debdot' setup script will install a minimal work environment complete
-# with all the bells and whistles needed to start working properly.
+# This 'pde-conf' setup script will install a minimal work environment
+# complete with all the bells and whistles needed to start working properly.
 # ---
 # There are no worries of losing a potential old configuration: il will be
 # stored in a separate folder in order to be restored manually if needed.
@@ -41,7 +41,11 @@ function error-echo () {
 function store-conf () {
     function backup-conf () {
         if [[ -f "$1" ]]; then
-            [[ ! -L "$1" ]] || mv "$1" "${RESTORE}" && command unlink "$1"
+            if [[ -L "$1" ]]; then
+                command unlink "$1"
+            else
+                mv "$1" "${RESTORE}"
+            fi
         fi
     }
     RESTORE="${HOME}/pde-conf-restore" && mkdir "${RESTORE}"
@@ -59,12 +63,17 @@ function store-conf () {
 #########
 
 warning-message
+SCRIPTPATH="$( cd "$(command dirname "$0")" ; pwd -P )" || exit 1
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
-sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux vim-gtk3 wamerican \
+sudo apt-get install -qq -y git xclip trash-cli bash bash-completion tmux vim-gtk3 wamerican \
       fd-find fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
 store-conf
-command stow bash tmux vim
+cp "${SCRIPTPATH}/.bash_logout" "${HOME}/"
+cp "${SCRIPTPATH}/.bashrc" "${HOME}/"
+cp "${SCRIPTPATH}/.profile" "${HOME}/"
+cp "${SCRIPTPATH}/.tmux.conf" "${HOME}/"
+cp "${SCRIPTPATH}/.vimrc" "${HOME}/"
 
 
 
