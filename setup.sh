@@ -15,9 +15,9 @@
 RED='\033[1;36m'
 NC='\033[0m'
 # ---
-if [[ -d "$HOME/.debdot_restore" ]]; then
-    printf "\n${RED}%s${NC}"   "═══════ Warning: .debdot already installed ═══════"
-    printf "\n${RED}%s${NC}\n" "Remove ~/.debdot_restore and run this script again"
+if [[ -d "${HOME}/pde-conf-restore" ]]; then
+    printf "\n${RED}%s${NC}"   "═══════ Warning: pde-conf already installed ═══════"
+    printf "\n${RED}%s${NC}\n" "Remove ~/pde-conf-restore and run this script again"
     exit 1
 fi
 # ---
@@ -38,18 +38,18 @@ function error-echo () {
     exit 1
 }
 # ---
-function restore-debdot () {
-    function backup-debdot () {
+function store-conf () {
+    function backup-conf () {
         if [[ -f "$1" ]]; then
             [[ ! -L "$1" ]] || mv "$1" "${RESTORE}" && command unlink "$1"
         fi
     }
-    RESTORE="${HOME}/.debdot_restore" && mkdir "${RESTORE}"
-    backup-debdot "${HOME}/.bash_logout"
-    backup-debdot "${HOME}/.bashrc"
-    backup-debdot "${HOME}/.profile"
-    backup-debdot "${HOME}/.tmux.conf"
-    backup-debdot "${HOME}/.vimrc"
+    RESTORE="${HOME}/pde-conf-restore" && mkdir "${RESTORE}"
+    backup-conf "${HOME}/.bash_logout"
+    backup-conf "${HOME}/.bashrc"
+    backup-conf "${HOME}/.profile"
+    backup-conf "${HOME}/.tmux.conf"
+    backup-conf "${HOME}/.vimrc"
 }
 
 
@@ -63,7 +63,7 @@ sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 sudo apt-get install -qq -y  git stow xclip trash-cli bash bash-completion tmux vim-gtk3 wamerican \
       fd-find fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
 # ---
-restore-debdot
+store-conf
 command stow bash tmux vim
 
 
