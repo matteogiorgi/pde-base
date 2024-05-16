@@ -53,6 +53,7 @@ function store-conf () {
     backup-conf "${HOME}/.profile"
     backup-conf "${HOME}/.tmux.conf"
     backup-conf "${HOME}/.vimrc"
+    backup-conf "${HOME}/.local/bin/fetch.sh"
 }
 
 
@@ -63,6 +64,7 @@ function store-conf () {
 
 warning-message
 SCRIPTPATH="$( cd "$(command dirname "$0")" ; pwd -P )" || exit 1
+"${SCRIPTPATH}/fetch.sh"
 sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 sudo apt-get install -qq -y git xclip trash-cli bash bash-completion tmux vim-gtk3 wamerican \
       fd-find fzy fonts-firacode input-remapper diodon || error-echo "installing packages"
@@ -73,6 +75,7 @@ cp "${SCRIPTPATH}/bash/.bashrc" "${HOME}/"
 cp "${SCRIPTPATH}/bash/.profile" "${HOME}/"
 cp "${SCRIPTPATH}/tmux/.tmux.conf" "${HOME}/"
 cp "${SCRIPTPATH}/vim/.vimrc" "${HOME}/"
+cp "${SCRIPTPATH}/fetch.sh" "${HOME}/.local/bin/"
 
 
 

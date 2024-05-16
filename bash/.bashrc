@@ -234,3 +234,13 @@ bind -m vi-insert -x '"\C-f": ffind && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-k": fhook'
 bind -m vi-insert -x '"\C-g": fgit'
+
+
+
+
+### System-fetcher
+##################
+
+if [[ -x "$(command -v fetch.sh)" ]]; then
+    fetch.sh
+fi
