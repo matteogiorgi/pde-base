@@ -15,9 +15,9 @@
 RED='\033[1;36m'
 NC='\033[0m'
 # ---
-if [[ -d "${HOME}/pde-conf-restore" ]]; then
-    printf "\n${RED}%s${NC}"   "═══════ Warning: pde-conf already installed ═══════"
-    printf "\n${RED}%s${NC}\n" "Remove ~/pde-conf-restore and run this script again"
+if [[ -d "${HOME}/.pde-restore" ]]; then
+    printf "\n${RED}%s${NC}"   "════════ Warning: pde-conf already set ════════"
+    printf "\n${RED}%s${NC}\n" "Remove ~/.pde-restore and run this script again"
     exit 1
 fi
 # ---
@@ -47,7 +47,7 @@ function store-conf () {
             fi
         fi
     }
-    RESTORE="${HOME}/pde-conf-restore" && mkdir "${RESTORE}"
+    RESTORE="${HOME}/.pde-restore" && mkdir "${RESTORE}"
     backup-conf "${HOME}/.bash_logout"
     backup-conf "${HOME}/.bashrc"
     backup-conf "${HOME}/.profile"
