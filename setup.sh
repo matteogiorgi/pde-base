@@ -65,9 +65,9 @@ function store-conf () {
 warning-message
 SCRIPTPATH="$( cd "$(command dirname "$0")" ; pwd -P )" || exit 1
 "${SCRIPTPATH}/fetch.sh"
-sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
-sudo apt-get install -qq -y git xclip trash-cli bash bash-completion tmux vim-gtk3 wamerican \
-      fd-find fzy fonts-firacode input-remapper diodon || error-echo "installing from apt"
+command sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
+command sudo apt-get install -qq -y git xclip trash-cli bash bash-completion tmux vim-gtk3 \
+      wamerican fd-find fzy input-remapper diodon || error-echo "installing from apt"
 # ---
 store-conf
 cp "${SCRIPTPATH}/bash/.bash_logout" "${HOME}/"

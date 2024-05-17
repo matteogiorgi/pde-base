@@ -115,8 +115,8 @@ if has('gui_running')
     set guicursor+=a:blinkon0
     set columns=130 lines=50
     set vb t_vb=
-    if system('fc-list') =~ 'Fira Code'
-        set guifont=Fira\ Code\ 10
+    if system('fc-list') =~ 'monospace'
+        set guifont=monospace\ 10
     endif
 endif
 " }}}
