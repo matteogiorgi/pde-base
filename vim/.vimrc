@@ -15,12 +15,16 @@ endif
 
 
 
-" Undodir {{{
+" Python3 & Undodir {{{
+if has('python3')
+    let g:python3_host_prog = '/usr/bin/python3'
+endif
+" ---
 if has('persistent_undo')
     if !isdirectory(expand('~/.vim/undodir'))
         execute "!mkdir -p ~/.vim/undodir &>/dev/null"
     endif
-    set undodir=$HOME/.vim/undodir
+    set undodir=${HOME}/.vim/undodir
     set undofile
 endif
 " }}}
@@ -28,24 +32,15 @@ endif
 
 
 
-" Python3 & Linebreak {{{
-if has('python3')
-    let g:python3_host_prog = '/usr/bin/python3'
-endif
-" ---
-if has('linebreak')
-    let &showbreak='  ~'
-endif
-" }}}
-
-
-
-
-" Leaders & Caret {{{
+" Leaders, Caret & Linebreak {{{
 let g:mapleader = "\<Space>"
 let g:maplocalleader = "\\"
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+" ---
+if has('linebreak')
+    let &showbreak='  ~'
+endif
 " }}}
 
 
