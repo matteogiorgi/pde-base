@@ -43,7 +43,7 @@ function store-conf () {
             if [[ -L "$1" ]]; then
                 command unlink "$1"
             else
-                mv "$1" "${RESTORE}"
+                mv "$1" "${RESTORE}/"
             fi
         fi
     }
