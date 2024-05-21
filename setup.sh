@@ -15,9 +15,9 @@
 RED='\033[1;36m'
 NC='\033[0m'
 # ---
-if [[ -d "${HOME}/.confrestore" ]]; then
-    printf "\n${RED}%s${NC}"   "════════ Warning: pde-conf already set ════════"
-    printf "\n${RED}%s${NC}\n" "Remove ~/.confrestore and run this script again"
+if [[ -d "${HOME}/.pderestore-conf" ]]; then
+    printf "\n${RED}%s${NC}"   "══════════ Warning: pde-conf already set ══════════"
+    printf "\n${RED}%s${NC}\n" "Remove ~/.pderestore-conf and run this script again"
     exit 1
 fi
 # ---
@@ -47,7 +47,7 @@ function store-conf () {
             fi
         fi
     }
-    RESTORE="${HOME}/.confrestore" && command mkdir -p "${RESTORE}"
+    RESTORE="${HOME}/.pderestore-conf" && command mkdir -p "${RESTORE}"
     backup-conf "${HOME}/.bash_logout"
     backup-conf "${HOME}/.bashrc"
     backup-conf "${HOME}/.profile"
