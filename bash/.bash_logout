@@ -4,11 +4,6 @@
 # The default script is located in /etc/bash.bash_logout
 
 
-
-
-### Clear
-#########
-
 if [[ "$SHLVL" = 1 ]]; then
     [[ -x /usr/bin/clear_console ]] && /usr/bin/clear_console -q
 fi
