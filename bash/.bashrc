@@ -85,7 +85,11 @@ function ffind () {
           FFIND="$(command find . -type f -not -path '*/\.*' -not -path '.')"
     FFIND="$(echo "$FFIND" | command sed 's|^\./||' | \
           command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
-    [[ -f "$FFIND" ]] && "${EDITOR:=/usr/bin/vi}" "$FFIND"
+    [[ -f "$FFIND" ]] || return
+    case $(command file --mime-type "$FFIND" -bL) in
+        text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FFIND";;
+        *) command xdg-open "$FFIND" &>/dev/null;;
+    esac
 }
 # ---
 function fjump () {
