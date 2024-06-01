@@ -56,27 +56,36 @@ function git-branch () {
     command git branch --no-color 2>/dev/null | command sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(git-status))/"
 }
 # ---
-function ffind () {
+function fexplore () {
     [[ -x "$(command -v fzy)" ]] || return
-    TMP="/tmp/ffind$$"
+    TMP="/tmp/fexplore$$"
     (
-        while FFIND="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
+        while FEXPLORE="$(command ls -aF --ignore="." --ignore=".git" --group-directories-first | `
               `command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"; do
-            FFIND="$PWD/${FFIND%[@|*|/]}"
-            if [[ -d "$FFIND" ]]; then
-                cd "$FFIND" || return
-                printf '%s\n' "$FFIND" > "$TMP"
+            FEXPLORE="$PWD/${FEXPLORE%[@|*|/]}"
+            if [[ -d "$FEXPLORE" ]]; then
+                cd "$FEXPLORE" || return
+                printf '%s\n' "$FEXPLORE" > "$TMP"
                 continue
             fi
-            case $(command file --mime-type "$FFIND" -bL) in
-                text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FFIND";;
-                *) command xdg-open "$FFIND" &>/dev/null;;
+            case $(command file --mime-type "$FEXPLORE" -bL) in
+                text/* | application/json) "${EDITOR:=/usr/bin/vi}" "$FEXPLORE";;
+                *) command xdg-open "$FEXPLORE" &>/dev/null;;
             esac
         done
     )
     [[ -f "$TMP" ]] || return
     cd "$(command cat $TMP)" || return
     rm -f "$TMP"
+}
+# ---
+function ffind () {
+    [[ -x "$(command -v fzy)" ]] || return
+    [[ -x "$(command -v fdfind)" ]] && FFIND="$(command fdfind . --type file)" || \
+          FFIND="$(command find . -type f -not -path '*/\.*' -not -path '.')"
+    FFIND="$(echo "$FFIND" | command sed 's|^\./||' | \
+          command fzy -p "$(pwd | command sed "s|^$HOME|~|")$(git-branch "(%s)") > ")"
+    [[ -f "$FFIND" ]] && "${EDITOR:=/usr/bin/vi}" "$FFIND"
 }
 # ---
 function fjump () {
@@ -225,14 +234,16 @@ bind 'set visible-stats on'
 bind 'set colored-stats on'
 # ---
 bind -m vi-command -x '"\C-l": clear -x && echo ${PS1@P}'
-bind -m vi-command -x '"\C-f": ffind && echo ${PS1@P}'
+bind -m vi-command -x '"\C-e": fexplore && echo ${PS1@P}'
 bind -m vi-command -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-command -x '"\C-k": fhook'
+bind -m vi-command -x '"\C-f": ffind'
 bind -m vi-command -x '"\C-g": fgit'
 bind -m vi-insert -x '"\C-l": clear -x && echo ${PS1@P}'
-bind -m vi-insert -x '"\C-f": ffind && echo ${PS1@P}'
+bind -m vi-insert -x '"\C-e": fexplore && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-k": fhook'
+bind -m vi-insert -x '"\C-f": ffind'
 bind -m vi-insert -x '"\C-g": fgit'
 
 
