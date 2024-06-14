@@ -268,7 +268,6 @@ nnoremap <leader>j :buffers!<CR>:buffer<Space>
 nnoremap <leader>k :buffer#<CR>
 nnoremap <leader>o :tabnew %<CR>
 nnoremap <leader>c :tabclose<CR>
-nnoremap <leader>z :update<CR>
 " ---
 nnoremap <leader>a :call <SID>ToggleQF()<CR>
 nnoremap <leader>m :call <SID>MarkLineQF()<CR>
@@ -276,6 +275,7 @@ nnoremap <leader>r :call <SID>ResetQF()<CR>
 nnoremap <leader>w :call <SID>ScratchBuffer()<CR>
 " ---
 nnoremap <leader>e :Explore<CR>
+nnoremap <silent>ZU :update<CR>
 tnoremap <silent><C-x> <C-\><C-n>
 " }}}
 
