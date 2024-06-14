@@ -258,18 +258,17 @@ noremap <silent><C-l> )
 noremap <silent><C-j> }
 noremap <silent><C-k> {
 " ---
+nnoremap <silent>Y y$
 vnoremap <silent>H <gv
 vnoremap <silent>L >gv
 xnoremap <silent>J :move '>+1<CR>gv=gv
 xnoremap <silent>K :move '<-2<CR>gv=gv
 " ---
-nnoremap <silent>Y y$
-nnoremap <silent>U :update<CR>
-" ---
 nnoremap <leader>j :buffers!<CR>:buffer<Space>
 nnoremap <leader>k :buffer#<CR>
 nnoremap <leader>o :tabnew %<CR>
 nnoremap <leader>c :tabclose<CR>
+nnoremap <leader>z :update<CR>
 " ---
 nnoremap <leader>a :call <SID>ToggleQF()<CR>
 nnoremap <leader>m :call <SID>MarkLineQF()<CR>
