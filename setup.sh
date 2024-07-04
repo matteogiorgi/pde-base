@@ -75,6 +75,8 @@ cp "${SCRIPTPATH}/bash/.bashrc" "${HOME}/"
 cp "${SCRIPTPATH}/bash/.profile" "${HOME}/"
 cp "${SCRIPTPATH}/tmux/.tmux.conf" "${HOME}/"
 cp "${SCRIPTPATH}/vim/.vimrc" "${HOME}/"
+# ---
+command mkdir -p "${HOME}/.local/bin/"
 cp "${SCRIPTPATH}/fetch.sh" "${HOME}/.local/bin/"
 
 
