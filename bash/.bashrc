@@ -142,13 +142,13 @@ function fkill() {
               ` 8 SIGFPE\n 9 SIGKILL\n10 SIGUSR1\n11 SIGSEGV\n12 SIGUSR2\n13 SIGPIPE\n14 SIGALRM\n15 SIGTERM\n`
               `16 SIGSTKFLT\n17 SIGCHLD\n18 SIGCONT\n19 SIGSTOP\n20 SIGTSTP\n21 SIGTTIN\n22 SIGTTOU\n23 SIGURG\n`
               `24 SIGXCPU\n25 SIGXFSZ\n26 SIGVTALRM\n27 SIGPROF\n28 SIGWINCH\n29 SIGIO\n30 SIGPWR\n31 SIGSYS\n" | `
-              `command fzy -p "Process \"${PROCCMD:0:50}\" selected > ")"; then
+              `command fzy -p "process \"${PROCCMD:0:50}\" selected > ")"; then
             if [[ "${FKILLSIGNAL:0:2}" == " 0" ]]; then
-                echo "Process \"${PROCCMD:0:50}\" intact"
+                echo "process \"${PROCCMD:0:50}\" intact"
                 return
             fi
             command kill -s "${FKILLSIGNAL:0:2}" "$PROCPID"
-            echo "Process \"${PROCCMD:0:50}\" signaled with ${FKILLSIGNAL:3}"
+            echo "process \"${PROCCMD:0:50}\" signaled with ${FKILLSIGNAL:3}"
         fi
     fi
 }
