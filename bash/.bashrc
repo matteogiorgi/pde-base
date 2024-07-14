@@ -138,12 +138,17 @@ function fkill() {
     if FKILL="$(command ps --no-headers -H -u "$USER" -o pid,cmd | command fzy -p "$USER processes > ")"; then
         PROCPID="$(echo "$FKILL" | awk '{print $1}')"
         PROCCMD="$(echo "$FKILL" | awk '{$1=""; sub(/^ /, ""); print}')"
-        if FKILLCONFIRM="$(printf "0. Keep \"${PROCCMD:0:50}\" alive\n1. SIGKILL \"${PROCCMD:0:50}\" now" | command fzy -p "Process \"${PROCCMD:0:50}\" selected > ")"; then
-            if [[ "${FKILLCONFIRM:0:2}" == "1." ]]; then
-                command kill -9 "$PROCPID" && echo "Process \"${PROCCMD:0:50}\" is now dead"
-            else
-                echo "Process \"${PROCCMD:0:50}\" is still alive"
+        if FKILLSIGNAL="$(printf " 0 SIGNULL\n 1 SIGHUP\n 2 SIGINT\n 3 SIGQUIT\n 4 SIGILL\n 5 SIGTRAP\n 6 SIGABRT\n 7 SIGBUS\n`
+              ` 8 SIGFPE\n 9 SIGKILL\n10 SIGUSR1\n11 SIGSEGV\n12 SIGUSR2\n13 SIGPIPE\n14 SIGALRM\n15 SIGTERM\n`
+              `16 SIGSTKFLT\n17 SIGCHLD\n18 SIGCONT\n19 SIGSTOP\n20 SIGTSTP\n21 SIGTTIN\n22 SIGTTOU\n23 SIGURG\n`
+              `24 SIGXCPU\n25 SIGXFSZ\n26 SIGVTALRM\n27 SIGPROF\n28 SIGWINCH\n29 SIGIO\n30 SIGPWR\n31 SIGSYS\n" | `
+              `command fzy -p "Process \"${PROCCMD:0:50}\" selected > ")"; then
+            if [[ "${FKILLSIGNAL:0:2}" == " 0" ]]; then
+                echo "Process \"${PROCCMD:0:50}\" intact"
+                return
             fi
+            command kill -s "${FKILLSIGNAL:0:2}" "$PROCPID"
+            echo "Process \"${PROCCMD:0:50}\" signaled with ${FKILLSIGNAL:3}"
         fi
     fi
 }
