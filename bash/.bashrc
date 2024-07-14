@@ -132,6 +132,20 @@ function fgit() {
         command git diff "$FGIT"
     fi
 }
+# ---
+function fkill() {
+    [[ -x "$(command -v fzy)" ]] || return
+    if FKILL="$(command ps --no-headers -u "$USER" -o pid,cmd | command fzy -p "$USER processes > ")"; then
+        PROCPID="$(echo "$FKILL" | awk '{print $1}')"
+        PROCCMD="$(echo "$FKILL" | awk '{$1=""; sub(/^ /, ""); print}')"
+        read -p "Are you sure you want to kill process \"${PROCCMD:0:25}\"? [y/N]: " CONFIRM
+        if [[ $CONFIRM == [yY] ]]; then
+            command kill -9 "$PROCPID" && echo "Process \"${PROCCMD:0:25}\" is now dead"
+        else
+            echo "Process \"${PROCCMD:0:25}\" is still alive"
+        fi
+    fi
+}
 
 
 
@@ -243,12 +257,14 @@ bind -m vi-command -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-command -x '"\C-k": fhook'
 bind -m vi-command -x '"\C-f": ffind'
 bind -m vi-command -x '"\C-g": fgit'
+bind -m vi-command -x '"\C-x": fkill'
 bind -m vi-insert -x '"\C-l": clear -x && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-e": fexplore && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-j": fjump && echo ${PS1@P}'
 bind -m vi-insert -x '"\C-k": fhook'
 bind -m vi-insert -x '"\C-f": ffind'
 bind -m vi-insert -x '"\C-g": fgit'
+bind -m vi-insert -x '"\C-x": fkill'
 
 
 
