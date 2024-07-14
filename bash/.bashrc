@@ -135,11 +135,11 @@ function fgit() {
 # ---
 function fkill() {
     [[ -x "$(command -v fzy)" ]] || return
-    if FKILL="$(command ps --no-headers -u "$USER" -o pid,cmd | command fzy -p "$USER processes > ")"; then
+    if FKILL="$(command ps --no-headers -H -u "$USER" -o pid,cmd | command fzy -p "$USER processes > ")"; then
         PROCPID="$(echo "$FKILL" | awk '{print $1}')"
         PROCCMD="$(echo "$FKILL" | awk '{$1=""; sub(/^ /, ""); print}')"
         read -p "Are you sure you want to kill process \"${PROCCMD:0:25}\"? [y/N]: " CONFIRM
-        if [[ $CONFIRM == [yY] ]]; then
+        if [[ "$CONFIRM" == [yY] ]]; then
             command kill -9 "$PROCPID" && echo "Process \"${PROCCMD:0:25}\" is now dead"
         else
             echo "Process \"${PROCCMD:0:25}\" is still alive"
