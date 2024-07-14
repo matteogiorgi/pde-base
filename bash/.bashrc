@@ -138,8 +138,8 @@ function fkill() {
     if FKILL="$(command ps --no-headers -H -u "$USER" -o pid,cmd | command fzy -p "$USER processes > ")"; then
         PROCPID="$(echo "$FKILL" | awk '{print $1}')"
         PROCCMD="$(echo "$FKILL" | awk '{$1=""; sub(/^ /, ""); print}')"
-        if FKILLCONFIRM="$(printf "Keep it alive\nConfirm kill9" | command fzy -p "Kill process \"${PROCCMD:0:25}\"? > ")"; then
-            if [[ "$FKILLCONFIRM" == "Confirm kill9" ]]; then
+        if FKILLCONFIRM="$(printf "0. Keep \"${PROCCMD:0:25}\" alive\n1. SIGKILL \"${PROCCMD:0:25}\" now" | command fzy -p "Process \"${PROCCMD:0:25}\" selected > ")"; then
+            if [[ "${FKILLCONFIRM:0:2}" == "1." ]]; then
                 command kill -9 "$PROCPID" && echo "Process \"${PROCCMD:0:25}\" is now dead"
             else
                 echo "Process \"${PROCCMD:0:25}\" is still alive"
