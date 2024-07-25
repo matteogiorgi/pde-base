@@ -191,15 +191,19 @@ augroup end
 augroup linenumber_prettyfier
     autocmd!
     autocmd WinEnter,BufEnter,FocusGained,InsertLeave *
-          \ if mode() ==# 'n' && &number == 1|
-          \     set relativenumber|
+          \ if mode() ==# 'n'|
+          \     if &number == 1|
+          \         set relativenumber|
+          \     endif|
+          \     set cursorline|
           \ endif|
-          \ set cursorline
     autocmd WinLeave,BufLeave,FocusLost,InsertEnter *
-          \ if mode() ==# 'n' && &number == 1|
-          \     set norelativenumber|
+          \ if mode() ==# 'n'|
+          \     if &number == 1|
+          \         set norelativenumber|
+          \     endif|
+          \     set nocursorline|
           \ endif|
-          \ set nocursorline
 augroup end
 " ---
 augroup cursorcolumn_prettyfier
