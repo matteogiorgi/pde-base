@@ -67,7 +67,7 @@ SCRIPTPATH="$( cd "$(command dirname "$0")" ; pwd -P )" || exit 1
 "${SCRIPTPATH}/fetch.sh"
 command sudo apt-get update && sudo apt-get upgrade -qq -y || error-echo "syncing repos"
 command sudo apt-get install -qq -y git xclip trash-cli bash bash-completion python3 vim-gtk3 tmux \
-      wamerican fd-find fzy fonts-firacode input-remapper || error-echo "installing from apt"
+      wamerican fd-find fzy fonts-ubuntu fonts-firacode input-remapper || error-echo "installing from apt"
 # ---
 store-conf
 cp "${SCRIPTPATH}/bash/.bash_logout" "${HOME}/"
