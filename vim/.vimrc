@@ -64,6 +64,7 @@ set runtimepath+=~/.vim_runtime
 set clipboard=unnamedplus
 set number relativenumber mouse=a ttymouse=xterm2
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+set textwidth=120 wrapmargin=0
 set ruler scrolloff=8 sidescrolloff=16
 set autoindent
 set formatoptions+=l
@@ -245,7 +246,7 @@ command! ClearSpaces
       \ echo !empty(v:statusmsg) ? v:statusmsg : 'cleared trailing spaces'
 command! LineWrap
       \ silent! execute &wrap ? 'setlocal nowrap' : 'setlocal wrap'|
-      \ silent! execute &wrap ?'noremap <buffer> j gj|noremap <buffer> k gk' : 'unmap <buffer> j|unmap <buffer> k'|
+      \ silent! execute &wrap ? 'noremap <buffer> j gj|noremap <buffer> k gk|noremap <buffer> 0 g0|noremap <buffer> $ g$' : 'unmap <buffer> j|unmap <buffer> k|unmap <buffer> 0|unmap <buffer> $'|
       \ echo &wrap ? 'lines wrapped' : 'lines unwrapped'
 " ---
 if has('gui_running')
