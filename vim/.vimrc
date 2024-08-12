@@ -223,6 +223,7 @@ augroup writer_filetype
     autocmd!
     autocmd FileType markdown,tex,text
           \ setlocal nonu nornu|
+          \ setlocal textwidth=0|
           \ setlocal wrap conceallevel=2|
           \ noremap <buffer> j gj|
           \ noremap <buffer> k gk
