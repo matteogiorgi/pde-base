@@ -65,6 +65,7 @@ set clipboard=unnamedplus
 set number relativenumber mouse=a ttymouse=xterm2
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set textwidth=120 wrapmargin=0
+set formatoptions=tcroqaj
 set ruler scrolloff=8 sidescrolloff=16
 set autoindent
 set formatoptions+=l
@@ -223,7 +224,7 @@ augroup writer_filetype
     autocmd!
     autocmd FileType markdown,tex,text
           \ setlocal nonu nornu|
-          \ setlocal textwidth=0|
+          \ setlocal formatoptions=|
           \ setlocal wrap conceallevel=2|
           \ noremap <buffer> j gj|
           \ noremap <buffer> k gk
