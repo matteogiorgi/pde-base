@@ -223,7 +223,7 @@ augroup end
 augroup syntax_prettyfier
     autocmd!
     autocmd VimEnter,ColorScheme * hi! MatchParen cterm=underline ctermbg=NONE ctermfg=NONE gui=underline guibg=NONE guifg=NONE
-augroup END
+augroup end
 " ---
 augroup writer_filetype
     autocmd!
