@@ -78,7 +78,7 @@ set cursorline noerrorbells novisualbell
 set cursorlineopt=number,line
 set splitbelow splitright
 set equalalways
-set nofoldenable foldmethod=marker
+set foldenable foldmethod=marker
 set matchpairs+=<:>
 set autochdir
 set hidden
