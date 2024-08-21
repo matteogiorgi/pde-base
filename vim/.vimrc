@@ -9,6 +9,8 @@
 " Vim9 {{{
 if v:version < 900
     finish
+elseif !isdirectory(expand('~/.vim'))
+    execute "!mkdir -p ~/.vim &>/dev/null"
 endif
 " }}}
 
@@ -78,7 +80,7 @@ set cursorline noerrorbells novisualbell
 set cursorlineopt=number,line
 set splitbelow splitright
 set equalalways
-set foldenable foldmethod=marker
+set foldenable foldmethod=manual
 set matchpairs+=<:>
 set autochdir
 set hidden
@@ -238,6 +240,18 @@ augroup end
 augroup scratchbuffer_autosave
     autocmd!
     autocmd TextChanged,TextChangedI /tmp/scratchbuffer silent write
+augroup end
+" ---
+augroup fold_autoload
+    autocmd!
+    autocmd BufWinEnter *
+          \ if expand('%:t') != ''|
+          \     silent! loadview|
+          \ endif
+    autocmd BufWinLeave *
+          \ if expand('%:t') != ''|
+          \     silent! mkview|
+          \ endif
 augroup end
 " }}}
 
