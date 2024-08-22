@@ -66,7 +66,7 @@ set runtimepath+=~/.vim_runtime
 set clipboard=unnamedplus
 set number relativenumber mouse=a ttymouse=xterm2
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-set nofoldenable foldmethod=indent foldlevelstart=-1 foldnestmax=10 foldminlines=1
+set nofoldenable foldmethod=indent foldlevelstart=-1 foldnestmax=10 foldminlines=1 foldcolumn=1
 set textwidth=120 wrapmargin=0
 set formatoptions=tcroqaj
 set ruler scrolloff=8 sidescrolloff=16
@@ -92,7 +92,7 @@ set sessionoptions=blank,buffers,curdir,folds,tabpages,help,options,winsize
 set colorcolumn=
 set cmdheight=1
 set nrformats-=alpha
-set fillchars=vert:┃,fold:━,eob:╺
+set fillchars=vert:┃,eob:╺
 set laststatus=2 showtabline=1
 set nocompatible
 set esckeys
@@ -224,7 +224,9 @@ augroup end
 " ---
 augroup syntax_prettyfier
     autocmd!
-    autocmd VimEnter,ColorScheme * hi! MatchParen cterm=underline ctermbg=NONE ctermfg=NONE gui=underline guibg=NONE guifg=NONE
+    autocmd VimEnter,ColorScheme *
+          \ hi! MatchParen cterm=underline ctermbg=NONE gui=underline guibg=NONE|
+          \ hi! VertSplit ctermbg=NONE guibg=NONE
 augroup end
 " ---
 augroup writer_filetype
