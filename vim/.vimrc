@@ -235,7 +235,7 @@ augroup writer_filetype
           \ setlocal nonu nornu|
           \ setlocal formatoptions=|
           \ setlocal wrap conceallevel=2|
-          \ setlocal foldmethod=manual|
+          \ setlocal foldenable foldcolumn=1 foldmethod=manual|
           \ noremap <buffer> j gj|
           \ noremap <buffer> k gk
 augroup end
