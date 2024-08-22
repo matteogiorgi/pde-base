@@ -66,7 +66,7 @@ set runtimepath+=~/.vim_runtime
 set clipboard=unnamedplus
 set number relativenumber mouse=a ttymouse=xterm2
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-set nofoldenable foldmethod=indent foldlevelstart=-1 foldnestmax=10 foldminlines=1 foldcolumn=0
+set nofoldenable foldcolumn=0 foldmethod=indent foldlevelstart=-1 foldnestmax=10 foldminlines=1
 set textwidth=120 wrapmargin=0
 set formatoptions=tcroqaj
 set ruler scrolloff=8 sidescrolloff=16
