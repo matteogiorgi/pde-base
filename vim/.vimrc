@@ -64,7 +64,7 @@ set title
 set shell=bash
 set runtimepath+=~/.vim_runtime
 set clipboard=unnamedplus
-set number relativenumber mouse=a ttymouse=xterm2
+set number relativenumber mouse=a ttymouse=sgr
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set nofoldenable foldcolumn=0 foldmethod=indent foldlevelstart=-1 foldnestmax=10 foldminlines=1
 set textwidth=120 wrapmargin=0
@@ -175,7 +175,8 @@ augroup netrw_prettyfier
     autocmd!
     autocmd FileType netrw
           \ setlocal bufhidden=wipe|
-          \ setlocal nobuflisted
+          \ setlocal nobuflisted|
+          \ setlocal nocursorline
     autocmd VimEnter *
           \ if !argc() && exists(':Explore')|
           \     Explore|
@@ -216,16 +217,16 @@ augroup linenumber_prettyfier
     autocmd WinEnter,BufWinEnter,FocusGained,InsertLeave *
           \ if mode() !=# 'i' && mode() !=# 'R'|
           \     if &number == 1|
-          \         set relativenumber|
+          \         setlocal relativenumber|
           \     endif|
-          \     set cursorline|
+          \     setlocal cursorline|
           \ endif|
     autocmd WinLeave,BufLeave,FocusLost,InsertEnter *
           \ if mode() !=# 'i' && mode() !=# 'R'|
           \     if &number == 1|
-          \         set norelativenumber|
+          \         setlocal norelativenumber|
           \     endif|
-          \     set nocursorline|
+          \     setlocal nocursorline|
           \ endif|
 augroup end
 " ---
@@ -237,7 +238,7 @@ augroup cursorcolumn_prettyfier
           \ endif
     autocmd InsertLeave *
           \ if &filetype != 'text' && &filetype != 'markdown' && &filetype != 'tex'|
-          \     set colorcolumn=|
+          \     setlocal colorcolumn=|
           \ endif
 augroup end
 " ---
