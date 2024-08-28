@@ -192,17 +192,36 @@ augroup netrw_prettyfier
     let g:netrw_altv = 0
 augroup end
 " ---
+augroup syntax_prettyfier
+    autocmd!
+    autocmd VimEnter,ColorScheme *
+          \ hi! MatchParen cterm=underline ctermbg=NONE gui=underline guibg=NONE|
+          \ hi! VertSplit ctermbg=NONE guibg=NONE
+augroup end
+" ---
+augroup fold_autoload
+    autocmd!
+    autocmd BufWinEnter *
+          \ if expand('%:t') != ''|
+          \     silent! loadview|
+          \ endif
+    autocmd BufWinLeave *
+          \ if expand('%:t') != ''|
+          \     silent! mkview|
+          \ endif
+augroup end
+" ---
 augroup linenumber_prettyfier
     autocmd!
-    autocmd WinEnter,BufEnter,FocusGained,InsertLeave *
-          \ if mode() ==# 'n'|
+    autocmd WinEnter,BufWinEnter,FocusGained,InsertLeave *
+          \ if mode() !=# 'i' && mode() !=# 'R'|
           \     if &number == 1|
           \         set relativenumber|
           \     endif|
           \     set cursorline|
           \ endif|
     autocmd WinLeave,BufLeave,FocusLost,InsertEnter *
-          \ if mode() ==# 'n'|
+          \ if mode() !=# 'i' && mode() !=# 'R'|
           \     if &number == 1|
           \         set norelativenumber|
           \     endif|
@@ -222,13 +241,6 @@ augroup cursorcolumn_prettyfier
           \ endif
 augroup end
 " ---
-augroup syntax_prettyfier
-    autocmd!
-    autocmd VimEnter,ColorScheme *
-          \ hi! MatchParen cterm=underline ctermbg=NONE gui=underline guibg=NONE|
-          \ hi! VertSplit ctermbg=NONE guibg=NONE
-augroup end
-" ---
 augroup writer_filetype
     autocmd!
     autocmd FileType markdown,tex,text
@@ -243,18 +255,6 @@ augroup end
 augroup scratchbuffer_autosave
     autocmd!
     autocmd TextChanged,TextChangedI /tmp/scratchbuffer silent write
-augroup end
-" ---
-augroup fold_autoload
-    autocmd!
-    autocmd BufWinEnter *
-          \ if expand('%:t') != ''|
-          \     silent! loadview|
-          \ endif
-    autocmd BufWinLeave *
-          \ if expand('%:t') != ''|
-          \     silent! mkview|
-          \ endif
 augroup end
 " }}}
 
